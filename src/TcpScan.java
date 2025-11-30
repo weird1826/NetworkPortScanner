@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +25,7 @@ public class TcpScan extends Scan {
     }
 
     public void setPortsToScan(int startPort, int endPort) {
-        System.out.println("\n\t[DEBUG] Setting scan for port range: " + startPort + "-" + endPort);
+        System.out.println("\t[DEBUG] Setting scan for port range: " + startPort + "-" + endPort);
         this.portsToScan.clear();
         for(int port = startPort; port <= endPort; port++) {
             this.portsToScan.add(port);
@@ -30,7 +33,7 @@ public class TcpScan extends Scan {
     }
 
     public void setPortsToScan(int... ports) {
-        System.out.println("    [DEBUG] Setting scan for ports: " + Arrays.toString(ports));
+        System.out.println("\t[DEBUG] Setting scan for ports: " + Arrays.toString(ports));
         this.portsToScan.clear();
         for(int p : ports) {
             this.portsToScan.add(p);
@@ -77,9 +80,50 @@ public class TcpScan extends Scan {
             System.err.println("\t[ERROR] Scan was interrupted.");
         }
 
-        System.out.println("\t[Info] Scan complete. Printing results:");
-        for (PortScanResult res : results) {
-            res.display();
+//        System.out.println("\t[Info] Scan complete. Printing results:");
+//        for (PortScanResult res : results) {
+//            res.display();
+//        }
+
+        System.out.println("\t[INFO] Scan complete. Total ports scanned: " + results.size());
+        System.out.println("--- OPEN PORTS FOUND ---");
+        results.stream()
+                .filter(PortScanResult::isOpen)
+                .forEach(PortScanResult::display);
+
+        long openPortCount = results.stream()
+                .filter(PortScanResult::isOpen)
+                .count();
+
+        System.out.println("--- Summary: ---");
+        System.out.println("\tTotal open ports: " + openPortCount);
+
+        List<PortScanResult> openPorts = results.stream()
+                .filter(PortScanResult::isOpen).toList();
+        saveReportToFile(openPorts);
+    }
+
+    private void saveReportToFile(List<PortScanResult> openPorts) {
+        String filename = "scan_report_for_" + this.targetIp + ".txt";
+        Path filePath = Paths.get(filename);
+
+        List<String> reportLines = new ArrayList<>();
+        reportLines.add("--- Scan report for " + this.targetIp + " ---");
+        reportLines.add("Total open ports found: " + openPorts.size());
+        reportLines.add("-------------------------------------------");
+
+        List<String> portLines = openPorts.stream()
+                .map(res -> "\t[+] Port " + res.getPortNumber() + " is OPEN")
+                .toList();
+
+        reportLines.addAll(portLines);
+
+        try {
+            System.out.println("\n\t[Info] Saving report to " + filename + "...");
+            Files.write(filePath, reportLines);
+            System.out.println("\t[Info] Report saved successfully.");
+        } catch (IOException e) {
+            System.err.println("[Error] Could not save report: " + e.getMessage());
         }
     }
 }
