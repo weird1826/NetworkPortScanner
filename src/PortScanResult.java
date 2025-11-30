@@ -1,6 +1,6 @@
 public class PortScanResult {
-    int portNumber;
-    boolean isOpen;
+    private final int portNumber;
+    private final boolean isOpen;
 
     // Constructor for the class
     public PortScanResult(int port, boolean open) {
@@ -15,5 +15,13 @@ public class PortScanResult {
         } else {
             System.out.println("    [-] Port " + this.portNumber + " is CLOSED.");
         }
+    }
+
+    public int getPortNumber() {
+        return this.portNumber;
+    }
+
+    public boolean isOpen(){
+        return this.isOpen;
     }
 }
