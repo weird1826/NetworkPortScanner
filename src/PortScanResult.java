@@ -1,4 +1,4 @@
-public class PortScanResult {
+public class PortScanResult implements IDisplayable {
     private final int portNumber;
     private final boolean isOpen;
 
@@ -8,7 +8,7 @@ public class PortScanResult {
         this.isOpen = open;
     }
 
-    // Prints whether a port is open or not
+    @Override
     public void display() {
         if(this.isOpen) {
             System.out.println("    [+] Port " + this.portNumber + " is OPEN.");

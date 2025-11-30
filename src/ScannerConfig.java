@@ -1,5 +1,5 @@
 // Holds the configuration for the scanner
-public class ScannerConfig {
+public class ScannerConfig implements IDisplayable {
     private final String targetIp;
     private int timeoutMilliseconds;
 
@@ -23,5 +23,12 @@ public class ScannerConfig {
 
     public String getTargetIp() {
         return this.targetIp;
+    }
+
+    @Override
+    public void display() {
+        System.out.println("\tConfiguration ---");
+        System.out.println("\t\tTarget: " + this.targetIp);
+        System.out.println("\t\tTimeout: " + this.timeoutMilliseconds + "ms");
     }
 }
