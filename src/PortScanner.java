@@ -3,22 +3,29 @@ import java.util.List;
 
 public class PortScanner {
     public static void main() {
-        ScannerConfig config = new ScannerConfig("127.0.0.1");
-        System.out.println("Configuring Scanner ---");
-        config.setTimeoutMilliseconds(3000);
-        System.out.println("    [DEBUG] Final Config: Target = " + config.getTargetIp() + ", Timeout = " + config.getTimeoutMilliseconds());
-
         System.out.println("\nInitializing Scan Job ---");
         TcpScan tcpJob = new TcpScan("127.0.0.1");
-        tcpJob.setPortsToScan(80);
-        TcpScan tcpJob2 = new TcpScan("192.168.1.1");
-        tcpJob2.setPortsToScan(1, 1024);
 
+        tcpJob.setPortsToScan(80);
+        tcpJob.run();
+
+        tcpJob.setPortsToScan(1, 1024);
         List<Scan> scanQueue = new ArrayList<>();
         scanQueue.add(tcpJob);
-        scanQueue.add(tcpJob2);
 
-        System.out.println("\nRunning All Scans in Queue: ---");
+        System.out.println("\nRunning All Scans in Queue (range): ---");
+        long startTime = System.currentTimeMillis();
+        for(Scan currentScan : scanQueue) {
+            currentScan.run();
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("\nTotal Scan Time: " + (endTime - startTime) + "ms ---");
+
+        tcpJob.setPortsToScan(80, 455, 8080);
+        scanQueue.clear();
+        scanQueue.add(tcpJob);
+
+        System.out.println( "\nRunning All Scans in Queue (varargs): ---");
         for(Scan currentScan : scanQueue) {
             currentScan.run();
         }
@@ -29,7 +36,6 @@ public class PortScanner {
 
         System.out.println("\nGenerating Report ---");
         List<IDisplayable> reportItems = new ArrayList<>();
-        reportItems.add(config);
         reportItems.add(result1);
         reportItems.add(result2);
 
