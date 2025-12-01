@@ -18,12 +18,21 @@ public class TcpScan extends Scan {
         this.portsToScan = new ArrayList<>();
     }
 
+    /**
+     * This method scans for a single port
+     * @param singlePort - Port Number to Scan
+     */
     public void setPortsToScan(int singlePort) {
         System.out.println("\t[Debug] Setting Scan for a single port: " + singlePort);
         this.portsToScan.clear();
         this.portsToScan.add(singlePort);
     }
 
+    /**
+     * This port receives a start port and end port to scan a port range
+     * @param startPort - Starting port
+     * @param endPort - Ending Port
+     */
     public void setPortsToScan(int startPort, int endPort) {
         System.out.println("\t[DEBUG] Setting scan for port range: " + startPort + "-" + endPort);
         this.portsToScan.clear();
@@ -32,11 +41,35 @@ public class TcpScan extends Scan {
         }
     }
 
+    /**
+     * This method takes variable amount of specific port numbers
+     * @param ports - Port number
+     */
     public void setPortsToScan(int... ports) {
         System.out.println("\t[DEBUG] Setting scan for ports: " + Arrays.toString(ports));
         this.portsToScan.clear();
         for(int p : ports) {
             this.portsToScan.add(p);
+        }
+    }
+
+    public void setPortsToScan(String portString) {
+        if(portString.contains("-")) {
+            try {
+                String[] parts = portString.split("-");
+                int start = Integer.parseInt(parts[0]);
+                int end = Integer.parseInt(parts[1]);
+                this.setPortsToScan(start, end);
+            } catch (Exception e) {
+                System.err.println("[Error] Invalid port range: " + portString);
+            }
+        } else {
+            try {
+                int port = Integer.parseInt(portString); // Convert text "80" to number 80
+                this.setPortsToScan(port);
+            } catch (NumberFormatException e) {
+                System.err.println("[Error] Invalid port number: " + portString);
+            }
         }
     }
 
