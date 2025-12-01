@@ -138,8 +138,8 @@ public class PortScanner {
 
     private static void printUsage() {
         System.out.println("--- Java Port Scanner ---");
-        System.out.println("Usage: Java PortScanner <target_ip> <port_range>");
-        System.out.println("  java PortScanner 127.0.0.1 80");
+        System.out.println("Usage: \n\tTo scan a specific port: java PortScanner -ip <target_ip> -p <port_number> - E.g., java PortScanner -ip 192.168.1.1 -p 80");
+        System.out.println("\n\tTo scan for a port range: java PortScanner -ip <target_ip> -r startingPort");
         System.out.println("  java PortScanner 127.0.0.1 1-1024");
     }
 }
