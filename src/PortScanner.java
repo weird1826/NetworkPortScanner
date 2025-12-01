@@ -14,6 +14,7 @@ public class PortScanner {
         String targetIp = null;
         String portNumber = null;
         String rangeString = null;
+        String timeout = null;
         int[] ports = null;
         int portFlagCount = 0;
 
@@ -23,7 +24,6 @@ public class PortScanner {
             String arg = args[i];
 
             try {
-                // Use 'switch' for cleaner code
                 switch (arg) {
                     case "--ipaddr":
                     case "-ip":
@@ -58,6 +58,12 @@ public class PortScanner {
                                 .toArray();
                         i++;
                         portFlagCount++;
+                        break;
+
+                    case "--timeout":
+                    case "--t":
+                        timeout = args[i+1];
+                        i++;
                         break;
 
                     default:
@@ -97,6 +103,10 @@ public class PortScanner {
             System.err.println("Please provide only one port option.");
             printUsage();
             return;
+        }
+
+        if (timeout == null){
+            timeout = "200";
         }
 
         System.out.println("\nInitializing Scan Job ---");
