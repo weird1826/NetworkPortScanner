@@ -1,4 +1,4 @@
-# NetworkPortScanner
+# Network Port Scanner
 
 A multithreaded Java-based network port scanner that allows you to scan TCP ports on target hosts. The scanner supports single port scanning, port range scanning, and scanning multiple specific ports.
 
@@ -104,7 +104,6 @@ NetworkPortScanner/
 │   ├── TcpScan.java          # TCP port scanning implementation
 │   ├── UdpScan.java          # UDP scan placeholder (not yet implemented)
 │   ├── PortScanResult.java   # Holds result data for a single port scan
-│   ├── ScannerConfig.java    # Configuration settings for scans
 │   └── IDisplayable.java     # Interface for displayable objects
 ├── README.md
 ├── .gitignore
