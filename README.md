@@ -118,7 +118,6 @@ NetworkPortScanner/
 - **TcpScan**: Implements TCP port scanning using socket connections
 - **UdpScan**: Placeholder for future UDP scanning functionality
 - **PortScanResult**: Data class storing port number and open/closed status
-- **ScannerConfig**: Configuration holder for scan settings (timeout, target IP)
 - **IDisplayable**: Interface for classes that can display their state
 
 ## How It Works
